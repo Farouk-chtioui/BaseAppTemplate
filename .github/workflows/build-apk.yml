@@ -13,44 +13,54 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Step 1: Checkout the repository
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # Step 2: Set up JDK 17, required by Gradle for Android builds
     - name: Set up JDK 17
       uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
         java-version: '17'
 
+    # Step 3: Set up Node.js (version 16 or whichever version is compatible with your project)
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '16'
 
+    # Step 4: Set up Android SDK with specific API level and build-tools version
     - name: Set up Android SDK
       uses: android-actions/setup-android@v2
       with:
-        api-level: 31
+        api-level: 31   # You can adjust this depending on your app requirements
         build-tools: 31.0.0
         cmdline-tools-version: "latest"
 
-    # Ensure gradlew is executable
+    # Step 5: Make gradlew executable so we can run it on GitHub Actions
     - name: Make gradlew executable
       run: chmod +x android/gradlew
 
-    # Install npm dependencies
-    - name: Install npm dependencies
-      run: npm install
+    # Step 6: Clean npm cache and install dependencies to ensure all modules are correctly installed
+    - name: Clean npm cache and install dependencies
+      run: |
+        npm cache clean --force
+        npm install
 
-    # Clean Android build
-    - name: Clean Android build
+    # Step 7: Clean the Android build directory to remove any cached or outdated files
+    - name: Clean Android build directory
       run: cd android && ./gradlew clean
 
-    # Build APK
-    - name: Install dependencies and build APK
-      run: cd android && ./gradlew assembleRelease --stacktrace
+    # Step 8: Ensure autolinking.json exists and list contents of generated autolinking directory for debugging
+    - name: List autolinking directory contents
+      run: ls -la android/build/generated/autolinking || echo "Autolinking directory not found"
 
-    # Create GitHub Release
+    # Step 9: Attempt to build the APK while providing detailed logs for debugging if any issues arise
+    - name: Build APK with detailed logging
+      run: cd android && ./gradlew assembleRelease --info --stacktrace
+
+    # Step 10: Create GitHub Release with a unique tag and name based on the input appName
     - name: Create GitHub Release
       id: create_release
       uses: actions/create-release@v1
@@ -62,8 +72,8 @@ jobs:
         draft: false
         prerelease: false
 
-    # Upload APK to Release
-    - name: Upload APK to Release
+    # Step 11: Upload the generated APK to the GitHub release
+    - name: Upload APK to GitHub Release
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
