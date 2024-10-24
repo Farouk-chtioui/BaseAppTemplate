@@ -11,7 +11,7 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
 
-// Import the packages for manual linking
+// Manually import all native modules you need
 import com.swmansion.gesturehandler.RNGestureHandlerPackage
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage
 import com.swmansion.rnscreens.RNScreensPackage
@@ -22,7 +22,7 @@ class MainApplication : Application(), ReactApplication {
       object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
-              // Manually link the packages that are disabled from autolinking
+              // Manually link the packages for Android
               add(RNGestureHandlerPackage())
               add(SafeAreaContextPackage())
               add(RNScreensPackage())
@@ -43,7 +43,6 @@ class MainApplication : Application(), ReactApplication {
     super.onCreate()
     SoLoader.init(this, false)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-      // If you opted-in for the New Architecture, we load the native entry point for this app.
       load()
     }
   }

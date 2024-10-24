@@ -45,7 +45,6 @@ jobs:
     - name: Clean Android build directory
       run: cd android && ./gradlew clean
 
-    # Build APK with detailed logging
     - name: Build APK with detailed logging
       run: cd android && ./gradlew assembleRelease --info --stacktrace
 
