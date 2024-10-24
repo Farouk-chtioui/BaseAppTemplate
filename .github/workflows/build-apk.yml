@@ -1,5 +1,6 @@
 name: Build APK
 
+# Trigger workflow manually and accept appName as an input
 on:
   workflow_dispatch:
     inputs:
@@ -13,21 +14,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Step 1: Checkout the code from the repository
     - name: Checkout code
       uses: actions/checkout@v2
 
+    # Step 2: Set up Java Development Kit (JDK) version 11
     - name: Set up JDK 11
       uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
         java-version: '11'
 
+    # Step 3: Install project dependencies (this will also compile the code)
     - name: Install dependencies
       run: ./gradlew build
 
+    # Step 4: Build the APK file (this creates the APK)
     - name: Build APK
       run: ./gradlew assembleRelease
 
+    # Step 5: Create a GitHub release
+    # This must be done BEFORE uploading the APK so that we get the upload_url to attach assets to the release
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -39,6 +46,7 @@ jobs:
         draft: false
         prerelease: false
 
+    # Step 6: Upload the APK file to the release as an asset
     - name: Upload APK as Release Asset
       id: upload-apk
       uses: actions/upload-release-asset@v1
