@@ -2,8 +2,9 @@ module.exports = {
     dependencies: {
       'react-native': {
         platforms: {
-          android: null,  // Disable autolinking for Android
+          android: {},  // Enable autolinking for Android
         },
       },
     },
   };
+  
