@@ -2,15 +2,16 @@ apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
 
 android {
+    namespace "com.baseapptemplate" // Replace with your app's actual package name
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.yourapp" // Replace with your app's application ID
+        applicationId "com.baseapptemplate" // Make sure this matches your package name
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true // Enable multidex if needed
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -29,10 +30,5 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.facebook.react:react-native:+'
-    // Add additional dependencies here
-
-    // Example additional dependencies:
-    implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "com.google.android.material:material:1.1.0"
-    implementation "androidx.core:core-splashscreen:1.0.0" // Example: add splash screen support
+    // Additional dependencies
 }
