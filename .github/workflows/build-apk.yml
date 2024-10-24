@@ -35,21 +35,17 @@ jobs:
         target: 'default'
         cmdline-tools-version: "latest"
 
-    - name: Install npm dependencies
-      run: npm install
+    - name: Accept SDK Licenses
+      run: yes | sdkmanager --licenses
 
-    # Disable autolinking generation and manually link the necessary libraries.
-    - name: Disable React Native Autolinking
-      run: |
-        echo "disableAutolink=true" >> android/gradle.properties
-
-    # Ensure gradlew is executable
     - name: Make gradlew executable
       run: chmod +x android/gradlew
 
-    # Build APK
-    - name: Build APK
-      run: cd android && ./gradlew assembleRelease --stacktrace
+    - name: Install npm dependencies
+      run: npm install
+
+    - name: Install dependencies and build APK
+      run: cd android && ./gradlew assembleRelease
 
     - name: Create GitHub Release
       id: create_release
