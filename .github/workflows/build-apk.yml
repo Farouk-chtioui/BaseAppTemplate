@@ -32,21 +32,24 @@ jobs:
       with:
         api-level: 31
         build-tools: 31.0.0
+        target: 'default'
         cmdline-tools-version: "latest"
 
+    - name: Install npm dependencies
+      run: npm install
+
+    # Disable autolinking generation and manually link the necessary libraries.
+    - name: Disable React Native Autolinking
+      run: |
+        echo "disableAutolink=true" >> android/gradle.properties
+
+    # Ensure gradlew is executable
     - name: Make gradlew executable
       run: chmod +x android/gradlew
 
-    - name: Clean npm cache and install dependencies
-      run: |
-        npm cache clean --force
-        npm install
-
-    - name: Clean Android build directory
-      run: cd android && ./gradlew clean
-
-    - name: Build APK with detailed logging
-      run: cd android && ./gradlew assembleRelease --info --stacktrace
+    # Build APK
+    - name: Build APK
+      run: cd android && ./gradlew assembleRelease --stacktrace
 
     - name: Create GitHub Release
       id: create_release
@@ -59,7 +62,7 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload APK to GitHub Release
+    - name: Upload APK to Release
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
