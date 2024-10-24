@@ -11,14 +11,21 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
 
+// Import the packages for manual linking
+import com.swmansion.gesturehandler.RNGestureHandlerPackage
+import com.th3rdwave.safeareacontext.SafeAreaContextPackage
+import com.swmansion.rnscreens.RNScreensPackage
+
 class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
       object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
-              // Packages that cannot be autolinked yet can be added manually here, for example:
-              // add(MyReactNativePackage())
+              // Manually link the packages that are disabled from autolinking
+              add(RNGestureHandlerPackage())
+              add(SafeAreaContextPackage())
+              add(RNScreensPackage())
             }
 
         override fun getJSMainModuleName(): String = "index"
