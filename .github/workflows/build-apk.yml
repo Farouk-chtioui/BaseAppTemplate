@@ -22,19 +22,26 @@ jobs:
         distribution: 'adopt'
         java-version: '11'
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    # Navigate to the android folder
+    - name: Change directory to android
+      run: cd android
+
     # Make gradlew executable
     - name: Make gradlew executable
-      run: chmod +x ./gradlew
+      run: chmod +x android/gradlew
 
-    # Verify the working directory (optional)
-    - name: Print working directory
-      run: pwd
+    # Install npm dependencies
+    - name: Install npm dependencies
+      run: npm install
 
-    - name: Install dependencies
-      run: ./gradlew build
-
-    - name: Build APK
-      run: ./gradlew assembleRelease
+    # Build APK using the gradlew inside android folder
+    - name: Install dependencies and build APK
+      run: cd android && ./gradlew assembleRelease
 
     - name: Create GitHub Release
       id: create_release
