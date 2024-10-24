@@ -34,31 +34,21 @@ jobs:
         build-tools: 31.0.0
         cmdline-tools-version: "latest"
 
-    # Clean and reinstall npm dependencies
-    - name: Clean npm cache and reinstall dependencies
-      run: |
-        npm cache clean --force
-        npm install
-
     # Ensure gradlew is executable
     - name: Make gradlew executable
       run: chmod +x android/gradlew
+
+    # Install npm dependencies
+    - name: Install npm dependencies
+      run: npm install
 
     # Clean Android build
     - name: Clean Android build
       run: cd android && ./gradlew clean
 
-    # Run autolinking manually
-    - name: Run React Native autolinking
-      run: npx react-native autolink
-
-    # List contents of autolinking directory
-    - name: List autolinking directory contents
-      run: ls -la android/build/generated/autolinking
-
     # Build APK
     - name: Install dependencies and build APK
-      run: cd android && ./gradlew assembleRelease
+      run: cd android && ./gradlew assembleRelease --stacktrace
 
     # Create GitHub Release
     - name: Create GitHub Release
