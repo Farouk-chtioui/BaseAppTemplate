@@ -44,7 +44,10 @@ jobs:
     - name: Install npm dependencies
       run: npm install
 
-    - name: Install dependencies and build APK
+    - name: Install NDK
+      run: sdkmanager "ndk;28.0.12433566"
+
+    - name: Build APK
       run: cd android && ./gradlew assembleRelease
 
     - name: Create GitHub Release
