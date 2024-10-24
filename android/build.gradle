@@ -16,6 +16,13 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
     }
+    // Disable the generateAutolinkingPackageList task
+    tasks.whenTaskAdded { task ->
+    if (task.name == 'generateAutolinkingPackageList') {
+        task.enabled = false
+        }
+    }
+
 }
 
 apply plugin: "com.facebook.react.rootproject"
